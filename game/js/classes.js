@@ -93,6 +93,7 @@ class Fighter extends Sprite {
     this.framesHold = 7
     this.sprites = sprites
     this.dead = false
+    this.jump = false
 
     for (const sprite in this.sprites) {
       sprites[sprite].image = new Image()
@@ -126,12 +127,17 @@ class Fighter extends Sprite {
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
       this.velocity.y = 0
       this.position.y = 330
+      this.jump = false
     } else this.velocity.y += gravity
   }
 
   attack() {
     this.switchSprite('attack1')
     this.isAttacking = true
+  }
+
+  checkJump() {
+    return this.jump
   }
 
   takeHit() {
@@ -179,11 +185,19 @@ class Fighter extends Sprite {
         }
         break
       case 'jump':
+        if (this.jump) {
+          console.log('my code is going here')
+          break
+        }
+
+        this.jump = true
+        console.log('jump is set to', this.jump)
         if (this.image !== this.sprites.jump.image) {
           this.image = this.sprites.jump.image
           this.framesMax = this.sprites.jump.framesMax
           this.framesCurrent = 0
         }
+
         break
 
       case 'fall':

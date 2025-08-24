@@ -6,7 +6,7 @@ canvas.height = 576
 
 c.fillRect(0, 0, canvas.width, canvas.height)
 
-const gravity = 0.7
+const gravity = 0.9
 
 const background = new Sprite({
   position: {
@@ -166,49 +166,49 @@ const keys = {
 
 decreaseTimer()
 
-function flip() {
-  if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.A)) {
-    player.setVelocityX(-150)
-    player.setFlipX(true) // Flip sprite to face left
-  } else if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.D)) {
-    player.setVelocityX(150)
-    player.setFlipX(false) // Flip sprite to face right
-  } else {
-    player.setVelocityX(0)
-  }
+// function flip() {
+//   if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.A)) {
+//     player.setVelocityX(-150)
+//     player.setFlipX(true) // Flip sprite to face left
+//   } else if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.D)) {
+//     player.setVelocityX(150)
+//     player.setFlipX(false) // Flip sprite to face right
+//   } else {
+//     player.setVelocityX(0)
+//   }
 
-  // Similar movement controls for player2
-  if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.UP)) {
-    enemy.setVelocityY(-150)
-  } else if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.DOWN)) {
-    enemy.setVelocityY(150)
-  } else {
-    enemy.setVelocityY(0)
-  }
+//   // Similar movement controls for player2
+//   if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.UP)) {
+//     enemy.setVelocityY(-150)
+//   } else if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.DOWN)) {
+//     enemy.setVelocityY(150)
+//   } else {
+//     enemy.setVelocityY(0)
+//   }
 
-  if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.LEFT)) {
-    enemy.setVelocityX(-150)
-    enemy.setFlipX(false) // Flip sprite to face right (opposite of player1)
-  } else if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.RIGHT)) {
-    enemy.setVelocityX(150)
-    enemy.setFlipX(true) // Flip sprite to face left (opposite of player1)
-  } else {
-    enemy.setVelocityX(0)
-  }
-}
-// flip()
-// faceEachOther()
+//   if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.LEFT)) {
+//     enemy.setVelocityX(-150)
+//     enemy.setFlipX(false) // Flip sprite to face right (opposite of player1)
+//   } else if (this.input.keyboard.isDown(Phaser.Input.Keyboard.KeyCodes.RIGHT)) {
+//     enemy.setVelocityX(150)
+//     enemy.setFlipX(true) // Flip sprite to face left (opposite of player1)
+//   } else {
+//     enemy.setVelocityX(0)
+//   }
+// }
+// // flip()
+// // faceEachOther()
 
-function faceEachOther() {
-  // Check positions and adjust facing direction
-  if (player.x < enemy.x) {
-    player.setFlipX(false) // Player 1 faces right
-    enemy.setFlipX(true) // Player 2 faces left
-  } else {
-    player.setFlipX(true) // Player 1 faces left
-    enemy.setFlipX(false) // Player 2 faces right
-  }
-}
+// function faceEachOther() {
+//   // Check positions and adjust facing direction
+//   if (player.x < enemy.x) {
+//     player.setFlipX(false) // Player 1 faces right
+//     enemy.setFlipX(true) // Player 2 faces left
+//   } else {
+//     player.setFlipX(true) // Player 1 faces left
+//     enemy.setFlipX(false) // Player 2 faces right
+//   }
+// }
 
 function animate() {
   window.requestAnimationFrame(animate)
@@ -324,8 +324,11 @@ window.addEventListener('keydown', (event) => {
         keys.a.pressed = true
         player.lastKey = 'a'
         break
-      case 'w':
-        player.velocity.y = -20
+      case 'w': // * here i can do some shady stuff
+        if (player.velocity.y == 0) {
+          player.velocity.y = -20
+          break
+        }
         break
       case ' ':
         player.attack()
@@ -344,7 +347,10 @@ window.addEventListener('keydown', (event) => {
         enemy.lastKey = 'ArrowLeft'
         break
       case 'ArrowUp':
-        enemy.velocity.y = -20
+        if (enemy.velocity.y == 0) {
+          enemy.velocity.y = -20
+          break
+        }
         break
       case 'ArrowDown':
         enemy.attack()
